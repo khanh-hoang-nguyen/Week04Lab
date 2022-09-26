@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>Simple Note Keeper</h1>
-        <h2>Edit Note</h2>
+        <h2>View Note</h2>
         <p>Title: ${note.title}</p> 
         <p>Contents: </p> 
         <p>${note.content}</p>

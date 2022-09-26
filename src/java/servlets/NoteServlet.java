@@ -44,7 +44,8 @@ public class NoteServlet extends HttpServlet {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
         noteEdit(title, content);
-        doGet(request, response);
+        request.setAttribute("note", note);
+        getServletContext().getRequestDispatcher("/WEB-INF/viewnote.jsp").forward(request, response);
 
     }
 
