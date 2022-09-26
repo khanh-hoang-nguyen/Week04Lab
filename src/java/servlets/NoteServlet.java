@@ -26,16 +26,13 @@ public class NoteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String query = request.getQueryString();
+        notePopulate();
+        request.setAttribute("note", note);
 
-        if (query != null && query.contains("edit")) {
-            // Display the edit form
+        if (request.getParameter("edit") != null) {
             getServletContext().getRequestDispatcher("/WEB-INF/editnote.jsp").forward(request, response);
         } else {
-            notePopulate();
-            request.setAttribute("note", note);
             getServletContext().getRequestDispatcher("/WEB-INF/viewnote.jsp").forward(request, response);
-
         }
 
     }
@@ -45,35 +42,36 @@ public class NoteServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String title = request.getParameter("title");
-        String contents = request.getParameter("content");
-
-        String path = getServletContext().getRealPath("/WEB-INF/note.txt");
-
-        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(path, false)));
-        pw.println(title);
-        pw.println(contents);
-
-        pw.close();
-
-        note = new Note(title, contents);
-
-        request.setAttribute("note", note);
-
-        getServletContext().getRequestDispatcher("/WEB-INF/viewnote.jsp").forward(request, response);
+        String content = request.getParameter("content");
+        noteEdit(title, content);
+        doGet(request, response);
 
     }
 
     private void notePopulate() {
-        String path = getServletContext().getRealPath("/WEB-INF/note.txt");
- 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-            String title = br.readLine();
-            String contents = br.readLine();
 
-            note = new Note(title, contents);
+        String path = getServletContext().getRealPath("/WEB-INF/note.txt");
+        try (BufferedReader br = new BufferedReader(new FileReader(new File(path)))) {
+            String title = br.readLine();
+            String content = br.readLine();
+            note = new Note(title, content);
+            br.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoteServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(NoteServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void noteEdit(String title, String content) {
+
+        String path = getServletContext().getRealPath("/WEB-INF/note.txt");
+        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(path, false)))) {
+            pw.println(title);
+            pw.println(content);
+            pw.close();
+            note = new Note(title, content);
+            pw.close();
         } catch (IOException ex) {
             Logger.getLogger(NoteServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
