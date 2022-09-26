@@ -12,6 +12,11 @@
         <title>Simple Note Keeper</title>
     </head>
     <body>
-        <h1>Edit Note</h1>
+        <h1>Simple Note Keeper</h1>
+        <h2>Edit Note</h2>
+        <p>Title: ${note.title}</p> 
+        <p>Contents: </p> 
+        <p>${note.content}</p>
     </body>
+    <a href="note?edit">Edit</a>
 </html>
