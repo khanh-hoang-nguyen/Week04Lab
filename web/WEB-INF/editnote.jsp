@@ -16,7 +16,7 @@
         <h2>Edit Note</h2>
         <form action="note" method="post">
             Title: <input type="text" name="title" value="${note.title}"><br>
-            Contents: <textarea name="content" rows="4">${note.content}</textarea><br>
+            Contents: <textarea name="content" rows="7" cols="25">${note.content}</textarea><br>
             <button type="submit">Save</button>
         </form>
     </body>

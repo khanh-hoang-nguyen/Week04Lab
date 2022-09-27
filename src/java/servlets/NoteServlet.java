@@ -6,6 +6,7 @@
 package servlets;
 
 import java.io.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -43,10 +44,9 @@ public class NoteServlet extends HttpServlet {
 
         String title = request.getParameter("title");
         String content = request.getParameter("content");
-        noteEdit(title, content);
+        noteEdit(title, setNewLine(content));
         request.setAttribute("note", note);
         getServletContext().getRequestDispatcher("/WEB-INF/viewnote.jsp").forward(request, response);
-
     }
 
     private void notePopulate() {
@@ -77,6 +77,18 @@ public class NoteServlet extends HttpServlet {
             Logger.getLogger(NoteServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private static String setNewLine(String input) {
+        Scanner scan = new Scanner(input);
+        ArrayList newLine = new ArrayList<>();
+
+        while (scan.hasNextLine()) {
+            newLine.add(scan.nextLine());
+        }
+        String result = String.join("<br>", newLine);
+
+        return result;
     }
 
 }
